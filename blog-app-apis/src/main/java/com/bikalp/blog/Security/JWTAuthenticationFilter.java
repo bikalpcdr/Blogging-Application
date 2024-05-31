@@ -14,8 +14,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
@@ -25,6 +26,8 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     private JWTTokenHelper jwtTokenHelper;
+
+    private static final Logger logger = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -39,14 +42,14 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             try {
                 username = jwtTokenHelper.getUsernameFromToken(token);
             } catch (IllegalArgumentException e) {
-                System.out.println("Unable to get Jwt token");
+                logger.error("Unable to get JWT token", e);
             } catch (ExpiredJwtException e) {
-                System.out.println("Jwt token has expired");
+                logger.error("JWT token has expired", e);
             } catch (MalformedJwtException e) {
-                System.out.println("Invalid Jwt");
+                logger.error("Invalid JWT token", e);
             }
         } else {
-            System.out.println("Jwt token doesn't begin with Bearer");
+            logger.warn("JWT token doesn't begin with Bearer");
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -59,10 +62,10 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
-                System.out.println("Invalid Jwt token");
+                logger.warn("Invalid JWT token");
             }
         } else {
-            System.out.println("Username is null or context is not null");
+            logger.debug("Username is null or context is not null");
         }
 
         filterChain.doFilter(request, response);
