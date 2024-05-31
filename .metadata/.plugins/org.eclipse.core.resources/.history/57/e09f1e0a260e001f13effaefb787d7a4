@@ -1,0 +1,5 @@
+package com.bikalp.blog.controllers;
+
+public class UserController {
+
+}

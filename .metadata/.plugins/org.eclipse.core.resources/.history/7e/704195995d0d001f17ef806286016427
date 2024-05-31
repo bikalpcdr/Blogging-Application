@@ -1,0 +1,5 @@
+package com.bikalp.blog.entities;
+
+public class User {
+
+}

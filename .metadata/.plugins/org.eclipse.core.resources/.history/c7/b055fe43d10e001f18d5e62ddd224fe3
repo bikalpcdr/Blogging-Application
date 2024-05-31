@@ -1,0 +1,53 @@
+package com.bikalp.blog.services.implementation;
+
+import com.bikalp.blog.entities.User;
+import com.bikalp.blog.payloads.UserDto;
+import com.bikalp.blog.repositories.UserRepo;
+import com.bikalp.blog.services.UserService;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
+@NoArgsConstructor
+@Getter
+@Setter
+public class UserServiceImpl implements UserService {
+
+    Autowired
+    private UserRepo userRepo;
+
+    @Override
+    public UserDto createUser(UserDto user) {
+        this.userRepo.save(user);
+        return null;
+    }
+
+    @Override
+    public UserDto updateUser(UserDto user, Integer userId) {
+        return null;
+    }
+
+    @Override
+    public UserDto getUserById(Integer userId) {
+        return null;
+    }
+
+    @Override
+    public List<UserDto> getAllUsers() {
+        return List.of();
+    }
+
+    @Override
+    public void deleteUser(Integer userId) {
+
+    }
+
+    private User dtoToUser(UserDto user){
+        User user = new User();
+        user.wait(user.getId());
+        user.
+    }
+}

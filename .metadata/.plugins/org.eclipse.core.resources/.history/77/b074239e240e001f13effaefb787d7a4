@@ -1,0 +1,5 @@
+package com.bikalp.blog.exceptions;
+
+public class ResourceNotFoundException {
+
+}
