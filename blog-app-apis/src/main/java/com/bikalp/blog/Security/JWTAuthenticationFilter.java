@@ -49,7 +49,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                 logger.error("Invalid JWT token", e);
             }
         } else {
-            logger.warn("JWT token doesn't begin with Bearer");
+            logger.warn("JWT token begin with Bearer");
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
