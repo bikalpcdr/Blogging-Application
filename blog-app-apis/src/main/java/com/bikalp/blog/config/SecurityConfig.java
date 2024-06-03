@@ -42,7 +42,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         // Allow access to the login endpoint without authentication
-                        .requestMatchers("/api/v1/auth/login").permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET).permitAll()
                         // Any other request requires authentication
                         .anyRequest().authenticated())

@@ -1,12 +1,16 @@
 package com.bikalp.blog.services.implementation;
 
+import com.bikalp.blog.config.AppConstant;
+import com.bikalp.blog.entities.Role;
 import com.bikalp.blog.entities.User;
 import com.bikalp.blog.exceptions.ResourceNotFoundException;
 import com.bikalp.blog.payloads.UserDto;
+import com.bikalp.blog.repositories.RoleRepo;
 import com.bikalp.blog.repositories.UserRepo;
 import com.bikalp.blog.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +24,28 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleRepo roleRepo;
+
+    @Override
+    public UserDto registerNewUser(UserDto userDto) {
+
+        this.modelMapper.map(userDto, UserDto.class);
+        User user1 = this.modelMapper.map(userDto, User.class);
+
+        // Encoded the password
+        user1.setPassword(this.passwordEncoder.encode(user1.getPassword()));
+
+        // roles to new user
+        Role role = this.roleRepo.findById(AppConstant.NORMAL_USER).get();
+        user1.getRoles().add(role);
+        User newUser = this.userRepo.save(user1);
+        return this.modelMapper.map(newUser, UserDto.class);
+    }
 
     @Override
     public UserDto createUser(UserDto userDto) {

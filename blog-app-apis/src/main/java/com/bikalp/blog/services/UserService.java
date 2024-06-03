@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface UserService {
+
+	UserDto registerNewUser(UserDto userDto);
 	
 	UserDto createUser(UserDto userDto);
 	

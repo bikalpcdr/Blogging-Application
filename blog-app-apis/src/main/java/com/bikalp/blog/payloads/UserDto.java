@@ -1,7 +1,11 @@
 package com.bikalp.blog.payloads;
 
+import com.bikalp.blog.entities.Role;
 import jakarta.validation.constraints.*;
 import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 //@Data
 //@Getter
@@ -27,16 +31,20 @@ public class UserDto {
 	@NotEmpty
 	private String about;
 
+	private Set<RoleDto> roles = new HashSet<>();
+
+
 	public UserDto() {
 
 	}
 
-	public UserDto(int id, String name, String email, String password, String about) {
+	public UserDto(int id, String name, String email, String password, String about, Set<RoleDto> roles) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.about = about;
+		this.roles = roles;
 	}
 
 	public int getId() {
@@ -77,5 +85,13 @@ public class UserDto {
 
 	public void setAbout(String about) {
 		this.about = about;
+	}
+
+	public Set<RoleDto> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<RoleDto> roles) {
+		this.roles = roles;
 	}
 }

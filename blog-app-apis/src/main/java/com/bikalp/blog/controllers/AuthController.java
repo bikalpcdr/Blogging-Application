@@ -3,11 +3,14 @@ package com.bikalp.blog.controllers;
 import com.bikalp.blog.Security.JWTTokenHelper;
 import com.bikalp.blog.payloads.JWTAuthRequest;
 import com.bikalp.blog.payloads.JWTAuthResponse;
+import com.bikalp.blog.payloads.UserDto;
+import com.bikalp.blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +31,9 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping("/login")
     public ResponseEntity<JWTAuthResponse> createToken(@RequestBody JWTAuthRequest request) {
         this.authenticate(request.getUsername(), request.getPassword());
@@ -44,5 +50,13 @@ public class AuthController {
     private void authenticate(String username, String password) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         this.authenticationManager.authenticate(authenticationToken);
+    }
+
+    // register new user api
+    @PostMapping("/register")
+    public ResponseEntity<UserDto> registerUser(@RequestBody UserDto userDto){
+
+        UserDto registeredUser = this.userService.registerNewUser(userDto);
+        return new ResponseEntity<UserDto>(registeredUser, HttpStatus.CREATED);
     }
 }
